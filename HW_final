@@ -6,7 +6,7 @@ using namespace std;
 #include<stdio.h>
 #include<math.h>
 
-int TOTAL = 2000,WORLD=30;
+int TOTAL = 2000, WORLD=30;
 double LETHAL = 100., MUTATION = 0.01;
 
 class cHuman {
@@ -16,7 +16,6 @@ private:
     bool die = 0;
     int date_die = 0;
     int date = -1;
-    int WORLD=30;
 public:
     bool IsInfected();
     bool IsDead();
@@ -36,9 +35,7 @@ public:
 };
 class cCountry :public vector<cHuman> {
 private:
-    int p = sizeof(TOTAL);
     int today=0;
-    int WORLD;
 public:
     void f() {
         cHuman a;
@@ -46,8 +43,8 @@ public:
         for (i = 0; i < TOTAL; i++)
         {
             push_back(a);
-            at(i).xcoo=0;
-            at(i).ycoo=0;
+            at(i).xcoo=rand()%30;
+            at(i).ycoo=rand()%30;
         }
     }
     cCountry() {
@@ -98,7 +95,6 @@ int main()
             c.sick -= 1;
         }
         c.healthy = TOTAL - c.dead - c.sick;
-        printf("(%d,%d)\n",c.at(n).xcoo,c.at(n).ycoo);
     }
     
     printf("Total=%d\n", TOTAL);
@@ -114,8 +110,7 @@ int main()
 }
 bool cHuman::IsInfected() { return(infect == 1 ? true : false); }
 bool cHuman::IsDead() { return(die == 1 ? true : false); }
-double cHuman::VirusLevel(int today)
-{
+double cHuman::VirusLevel(int today) {
     if (date == -1)return(0);
     else {
         if ((A*pow(B, today - date)) >= LETHAL)
@@ -129,9 +124,8 @@ double cHuman::VirusLevel(int today)
     };
 
 }
-bool cHuman::Died(int today)
-{
-    if (die==1)return(false);
+bool cHuman::Died(int today) {
+    if (die==1) return(false);
     else {
         VirusLevel(today);
         if (virus >= LETHAL) {
@@ -141,22 +135,19 @@ bool cHuman::Died(int today)
         else return(false);
     }
 }
-bool cHuman::InfectAnother(cHuman *person2, int day)
-{
-    if (infect == 1 && (*person2).infect == 1)return(false);
-    if (infect == 0 && (*person2).infect == 0)return(false);
+bool cHuman::InfectAnother(cHuman *person2, int day) {
+    if (infect == 1 && (*person2).infect == 1) return(false);
+    if (infect == 0 && (*person2).infect == 0) return(false);
     VirusLevel(day);
     double odds = STRENGTH*virus;
     if (odds >= 1)odds = 1;
     if (rand() / (double)RAND_MAX < odds) return(true);
     else return(false);
 }
-void cHuman::MakeInfected(int day)
-{
+void cHuman::MakeInfected(int day) {
     infect = 1;
     date = day;
 }
-double Myrand() { return(rand() % TOTAL); }
 void cCountry::Tomorrow() {
     today++;
     int i;
@@ -168,7 +159,7 @@ void cCountry::Tomorrow() {
         mutaSTR += at(i).STRENGTH;
         at(i).xcoo = (at(i).xcoo + WORLD + rand() % 3 - 1) % 30;
         at(i).ycoo = (at(i).ycoo + WORLD + rand() % 3 - 1) % 30;
-        if (at(i).xcoo == -1)at(i).xcoo = 29; if (at(i).ycoo == -1)at(i).ycoo = -29;
+        if (at(i).xcoo == -1)at(i).xcoo = 29; if (at(i).ycoo == -1)at(i).ycoo = 29;
         if (at(i).xcoo == 30)at(i).xcoo = 0; if (at(i).ycoo == 30)at(i).ycoo = 0;
     }
 }
