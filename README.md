@@ -30,3 +30,8 @@ cHuman::InfectAnother(cHuman*, int)|第二人, 第幾天|bool|以隨機決定是
 cCountry::Tomorrow()|-|Void|時間和參數變異推進|muta(), Died(int)
 cHuman::Died(int)|第幾天|bool|決定是否死亡|VirusLevel(int)
 cHuman::VirusLevel(int)|第幾天|double|回傳病毒數值
+
+姓名 | 住址 
+------------- | ------------- 
+李大華 | 桃園 
+張小明 | 高雄
