@@ -9,7 +9,7 @@
 
 輸出結果為300天後國民健康調查。  
 
-   ----
+----
    
 傳播機率｜**STRONG**  
 
@@ -19,4 +19,14 @@
 
 病毒強度超過**LETHAL=100**則為死亡  
 
+---
+函數｜參數｜回傳類型｜執行｜呼叫
+----|----|----|----|----
 
+cCountry::cCountry()｜-｜建構函數｜設定第一人感染｜f()
+cCountry::f()｜-｜Void｜處理向量及決定座標｜-
+cCountry::RandomInfect()｜-｜Void｜抓人感染｜InfectAnother(cHuman*, int), makep(double, double, double)
+cHuman::InfectAnother(cHuman*, int)｜第二人, 第幾天｜bool｜以隨機決定是否感染｜-
+cCountry::Tomorrow()｜-｜Void｜時間和參數變異推進｜muta(), Died(int)
+cHuman::Died(int)｜第幾天｜bool｜決定是否死亡｜VirusLevel(int)
+cHuman::VirusLevel(int)｜第幾天｜double｜回傳病毒數值
