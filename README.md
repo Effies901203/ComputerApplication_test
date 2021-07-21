@@ -1,13 +1,13 @@
 # ComputerApplication_test
 ## **病毒模擬器**
 
-一國家共有**2000**位國民及**30x30**平方單位之國土，  
+`一國家共有**2000**位國民及**30x30**平方單位之國土，  
 
 自第一位國民感染，共經過**300**天，  
 
 每一天同一單位上的國民兩兩接觸，  
 
-輸出結果為300天後國民健康調查。  
+輸出結果為300天後國民健康調查。  `
 
 ----
    
@@ -29,5 +29,4 @@ cHuman::InfectAnother(cHuman*, int) | 第二人, 第幾天 | bool    | 以隨機
 cCountry::Tomorrow()                | _            | Void    | 時間和參數變異推進 | muta(), Died(int)  
 cHuman::Died(int)                   | 第幾天        | bool    | 決定是否死亡      | VirusLevel(int)  
 cHuman::VirusLevel(int)             | 第幾天        | double  | 回傳病毒數值      | _  
-
 
