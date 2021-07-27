@@ -17,19 +17,19 @@ private:
     int date_die = 0;
     int date = -1;
 public:
+    double A = 0;
+    double B = 0;
+    double STRENGTH = 0;
+    int X_coordinate;
+    int Y_coordinate;
     bool IsInfected();
     bool IsDead();
-    void muta();
+    void ChangeMutation();
     void MakeInfected(int day);
     double VirusLevel(int day);
     bool Died(int day);
     bool InfectAnother(cHuman *person1, int day);
-    double A = 0;
-    double B = 0;
-    double STRENGTH = 0;
-    int xcoo;
-    int ycoo;
-    void makep(double A2, double B2, double STR2) {
+    void MakeParameter(double A2, double B2, double STR2) {
         A = A2; B = B2; STRENGTH = STR2;
     }
 };
@@ -37,36 +37,35 @@ class cCountry :public vector<cHuman> {
 private:
     int today=0;
 public:
+    int healthy = TOTAL;
+    int sick = 0;
+    int dead = 0;
+    double MutationA = 0;
+    double MutationB = 0;
+    double MutationSTR = 0;
     void f() {
         cHuman a;
         int i;
         for (i = 0; i < TOTAL; i++)
         {
             push_back(a);
-            at(i).xcoo=rand()%30;
-            at(i).ycoo=rand()%30;
+            at(i).X_coordinate=rand()%30;
+            at(i).Y_coordinate=rand()%30;
         }
     }
     cCountry() {
         f();
         today = 0;
         at(0).MakeInfected(0);
-        at(0).makep(0.5, 1.05, 0.6);
+        at(0).MakeParameter(0.5, 1.05, 0.6);
     }
     void Tomorrow();
     void RandomInfect();
-    int healthy = TOTAL;
-    int sick = 0;
-    int dead = 0;
-    double mutaA = 0;
-    double mutaB = 0;
-    double mutaSTR = 0;
-    void makep(int i, double A, double B, double STR) { at(i).makep(A, B, STR); };
 };
 
 
-int main()
-{
+int main(){
+    
     int i, n, m = 0;
     class cCountry c;
     srand(1234);
@@ -75,18 +74,17 @@ int main()
     {
         c.RandomInfect();
         c.Tomorrow();
-        c.mutaA += c.at(i).A;
-        c.mutaB += c.at(i).B;
-        c.mutaSTR += c.at(i).STRENGTH;
+        c.MutationA += c.at(i).A;
+        c.MutationB += c.at(i).B;
+        c.MutationSTR += c.at(i).STRENGTH;
         for (n = 0; n < TOTAL; n++)
             if (c.at(i).IsInfected())m++;
     }
-    double Aavg = c.mutaA / m,
-        Bavg = c.mutaB / m,
-        STRavg = c.mutaSTR / m;
+    double Aavg = c.MutationA / m,
+        Bavg = c.MutationB / m,
+        STRavg = c.MutationSTR / m;
 
-    for (n = 0; n < 2000; n++)
-    {
+    for (n = 0; n < TOTAL; n++){
         if (c.at(n).IsInfected())
             c.sick += 1;
         if (c.at(n).IsDead())
@@ -97,10 +95,10 @@ int main()
         c.healthy = TOTAL - c.dead - c.sick;
     }
     
-    printf("Total=%d\n", TOTAL);
-    printf("Healthy=%d\n", c.healthy);
-    printf("Died=%d\n", c.dead);
-    printf("Sick=%d\n", c.sick);
+    cout << "Total=" << TOTAL << endl;
+    cout << "Healthy=" << c.healthy << endl;
+    cout << "Died=" << c.dead << endl;
+    cout << "Sick=" << c.sick << endl;
     cout << "MUTATION=" << MUTATION << endl;
     cout << "Average A=" << Aavg << " <initial=0.5>" << endl;
     cout << "Average B=" << Bavg << " <initial=1.05>" << endl;
@@ -152,15 +150,17 @@ void cCountry::Tomorrow() {
     today++;
     int i;
     for (i = 0; i < TOTAL; i++) {
-        at(i).muta();
+        at(i).ChangeMutation();
         at(i).Died(today);
-        mutaA += at(i).A;
-        mutaB += at(i).B;
-        mutaSTR += at(i).STRENGTH;
-        at(i).xcoo = (at(i).xcoo + WORLD + rand() % 3 - 1) % 30;
-        at(i).ycoo = (at(i).ycoo + WORLD + rand() % 3 - 1) % 30;
-        if (at(i).xcoo == -1)at(i).xcoo = 29; if (at(i).ycoo == -1)at(i).ycoo = 29;
-        if (at(i).xcoo == 30)at(i).xcoo = 0; if (at(i).ycoo == 30)at(i).ycoo = 0;
+        MutationA += at(i).A;
+        MutationB += at(i).B;
+        MutationSTR += at(i).STRENGTH;
+        at(i).X_coordinate = (at(i).X_coordinate + WORLD + rand() % 3 - 1) % 30;
+        at(i).Y_coordinate = (at(i).Y_coordinate + WORLD + rand() % 3 - 1) % 30;
+        if (at(i).X_coordinate == -1) at(i).X_coordinate = 29;
+        if (at(i).Y_coordinate == -1) at(i).Y_coordinate = 29;
+        if (at(i).X_coordinate == 30) at(i).X_coordinate = 0;
+        if (at(i).Y_coordinate == 30) at(i).Y_coordinate = 0;
     }
 }
 void cCountry::RandomInfect() {
@@ -168,20 +168,20 @@ void cCountry::RandomInfect() {
     for (x = 0; x < (TOTAL-1); x++)
     {
         for (y = x + 1; y < TOTAL; y++) {
-            if (at(x).xcoo == at(y).xcoo&&at(x).ycoo== at(y).ycoo) {
+            if (at(x).X_coordinate == at(y).X_coordinate && at(x).Y_coordinate== at(y).Y_coordinate) {
                 if (at(x).InfectAnother(&at(y), today)) {
                     at(y).MakeInfected(today);
-                    makep(y, at(x).A, at(x).B, at(x).STRENGTH);
+                    at(y).MakeParameter(at(x).A, at(x).B, at(x).STRENGTH);
                 }
                 if (at(y).InfectAnother(&at(x), today)) {
                     at(x).MakeInfected(today);
-                    makep(x, at(y).A, at(y).B, at(y).STRENGTH);
+                    at(x).MakeParameter(at(y).A, at(y).B, at(y).STRENGTH);;
                 }
             }
         }
     }
 }
-void cHuman::muta() {
+void cHuman::ChangeMutation() {
     if (infect == 1 || die == 0) {
         double r = 1 + rand() / (double)RAND_MAX*(MUTATION * 2) - MUTATION;
         A = A*r;
